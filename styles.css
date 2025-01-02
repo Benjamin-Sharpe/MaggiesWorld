@@ -1,0 +1,43 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff8e1; /* Light yellow */
+    color: #ff69b4; /* Pink accents */
+  }
+  
+  .header {
+    background-color: #ffd700; /* Gold */
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .social-links a {
+    text-decoration: none;
+    color: white;
+    background-color: #ff69b4;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ffd700;
+    border-radius: 10px;
+    background: white;
+  }
+  
+  #gallery-preview img {
+    max-width: 100px;
+    margin: 5px;
+  }
+  
+  #collage-canvas {
+    display: none;
+    border: 2px solid #ff69b4;
+  }
+  
