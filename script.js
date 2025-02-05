@@ -1,81 +1,45 @@
-// script.js
+async function sendMessage() {
+    let userInput = document.getElementById("user-input").value;
+    if (!userInput) return;
 
-const OPENAI_API_KEY = 'sk-...GHIA'; // Your API key here
+    // Display user message in chat
+    addMessage(userInput, "user-message");
 
-// 1. Image Gallery & Collage Tool
-const uploader = document.getElementById('image-uploader');
-const galleryPreview = document.getElementById('gallery-preview');
-const canvas = document.getElementById('collage-canvas');
-const ctx = canvas.getContext('2d');
+    // Clear input field
+    document.getElementById("user-input").value = "";
 
-uploader.addEventListener('change', () => {
-  galleryPreview.innerHTML = '';
-  const files = Array.from(uploader.files);
+    // Fetch AI response from Together AI API (or any AI API)
+    let aiResponse = await fetchAIResponse(userInput);
 
-  files.forEach((file) => {
-    const img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
-    galleryPreview.appendChild(img);
-  });
-});
+    // Display AI response in chat
+    addMessage(aiResponse, "ai-message");
+}
 
-document.getElementById('create-collage-btn').addEventListener('click', () => {
-  const images = galleryPreview.querySelectorAll('img');
-  canvas.width = 500;
-  canvas.height = 500;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function addMessage(text, className) {
+    let chatBox = document.getElementById("chat-box");
+    let messageDiv = document.createElement("div");
+    messageDiv.classList.add("message", className);
+    messageDiv.textContent = text;
+    chatBox.appendChild(messageDiv);
+    
+    // Auto-scroll to latest message
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-  images.forEach((img, i) => {
-    const x = (i % 2) * 250; // Arrange in a grid
-    const y = Math.floor(i / 2) * 250;
-    ctx.drawImage(img, x, y, 250, 250);
-  });
+// Fetch AI response from API
+async function fetchAIResponse(userInput) {
+    const response = await fetch("https://api.together.xyz/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_API_KEY" // Replace with your Together AI API key
+        },
+        body: JSON.stringify({
+            model: "mistral-7b", // Change model if needed
+            messages: [{"role": "user", "content": userInput}]
+        })
+    });
 
-  canvas.style.display = 'block';
-});
-
-document.getElementById('set-background-btn').addEventListener('click', () => {
-  document.body.style.backgroundImage = `url(${canvas.toDataURL()})`;
-});
-
-// 2. AI Chat Integration
-document.getElementById('send-chat-btn').addEventListener('click', async () => {
-  const input = document.getElementById('chat-input').value.trim();
-  const log = document.getElementById('chat-log');
-  log.innerHTML += `<div><strong>You:</strong> ${input}</div>`;
-
-  const response = await fetch('https://api.openai.com/v1/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-4',
-      prompt: input,
-      max_tokens: 150,
-    }),
-  });
-
-  const data = await response.json();
-  const reply = data.choices[0].text.trim();
-  log.innerHTML += `<div><strong>AI:</strong> ${reply}</div>`;
-});
-
-// 3. Job Search Integration (Zippia Example)
-document.getElementById('job-search-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const title = document.getElementById('job-title').value;
-  const location = document.getElementById('location').value;
-
-  const response = await fetch('https://api.zippia.com/jobs', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ searchTitle: title, searchLocation: location }),
-  });
-
-  const jobs = await response.json();
-  document.getElementById('job-results').innerHTML = jobs.jobs
-    .map((job) => `<div>${job.jobTitle} at ${job.companyName}</div>`)
-    .join('');
-});
+    const data = await response.json();
+    return data.choices[0].message.content || "Sorry, I couldn't generate a response.";
+}
