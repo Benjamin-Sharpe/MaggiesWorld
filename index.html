@@ -1,85 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maggie's World</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Companion</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="header">
-    <h1>Welcome to Maggie's World 🌸</h1>
-    <nav class="social-links">
-      <a href="https://www.tiktok.com" target="_blank">TikTok</a>
-      <a href="https://www.facebook.com" target="_blank">Facebook</a>
-      <a href="https://www.youtube.com" target="_blank">YouTube</a>
-      <a href="https://www.dunkindonuts.com/en/apps" target="_blank">Dunkin' App</a>
-    </nav>
-  </header>
 
-  <main>
-    <!-- Image Gallery Tool -->
-    <section id="gallery-tool">
-      <h2>Picture Gallery & Collage Maker 📸</h2>
-      <input type="file" id="image-uploader" multiple>
-      <button id="create-collage-btn">Create Collage</button>
-      <button id="set-background-btn">Set Collage as Background</button>
-      <div id="gallery-preview"></div>
-      <canvas id="collage-canvas"></canvas>
-    </section>
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <!-- AI Name (Customizable) -->
+        <div class="chat-header">💬 Chat with Nova</div>
+        
+        <!-- Messages Display -->
+        <div id="chat-box" class="chat-box"></div>
 
-    <!-- Music Piano Section -->
-    <section id="piano-section">
-      <h2>Play Your Tune 🎶</h2>
-      <div id="piano" class="piano"></div>
-      <div class="piano-controls">
-        <button id="record-btn">Record</button>
-        <button id="stop-btn">Stop</button>
-        <button id="play-btn">Play</button>
-        <button id="download-btn">Download</button>
-      </div>
-    </section>
+        <!-- Input Field & Send Button -->
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
-    <!-- Period Tracker -->
-    <section id="period-tracker">
-      <h2>Period Tracker 🌸</h2>
-      <form id="tracker-form">
-        <label for="start-date">Start Date:</label>
-        <input type="date" id="start-date">
-        <label for="cycle-length">Cycle Length (days):</label>
-        <input type="number" id="cycle-length" min="1">
-        <button type="submit">Track</button>
-      </form>
-      <div id="tracker-results"></div>
-    </section>
-
-    <!-- AI Chat -->
-    <section id="ai-chat">
-      <h2>Chat with Maggie's AI 🤖</h2>
-      <div id="chat-box">
-        <div id="chat-log"></div>
-        <input type="text" id="chat-input" placeholder="Ask me anything...">
-        <button id="send-chat-btn">Send</button>
-      </div>
-    </section>
-
-    <!-- Job Search -->
-    <section id="job-search-section">
-      <h2>Find Your Dream Job 💼</h2>
-      <form id="job-search-form">
-        <input type="text" id="job-title" placeholder="Job Title (e.g., Developer)">
-        <input type="text" id="location" placeholder="Location (e.g., New York)">
-        <button type="submit">Search</button>
-      </form>
-      <div id="job-results"></div>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Maggie's World</p>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
