@@ -1,55 +1,66 @@
-async function sendMessage() {
-    let userInput = document.getElementById("user-input").value;
-    if (!userInput) return;
+document.addEventListener('DOMContentLoaded', () => {
+    const currentWeightDropdown = document.getElementById('current-weight');
+    const output = document.getElementById('output');
+    const scheduleOutput = document.getElementById('schedule');
+    const mealsOutput = document.getElementById('meals');
+    const waterOutput = document.getElementById('water');
 
-    // Display user message in chat
-    addMessage(userInput, "user-message");
-
-    // Clear input field
-    document.getElementById("user-input").value = "";
-
-    // Fetch AI response
-    let aiResponse = await fetchAIResponse(userInput);
-
-    // Display AI response in chat
-    addMessage(aiResponse, "ai-message");
-}
-
-function addMessage(text, className) {
-    let chatBox = document.getElementById("chat-box");
-    let messageDiv = document.createElement("div");
-    messageDiv.classList.add("message", className);
-    messageDiv.textContent = text;
-    chatBox.appendChild(messageDiv);
-
-    // Auto-scroll to latest message
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Fetch AI response from Together AI using Mistral 7B
-async function fetchAIResponse(userInput) {
-    try {
-        const response = await fetch("https://api.together.xyz/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer a0c401a7e04b7c7ca48121f14f3e41cd59e8bdf5ba54ab33fa179b8d10adb02f" // Your actual API key
-            },
-            body: JSON.stringify({
-                model: "mistral-7b",
-                messages: [{"role": "user", "content": userInput}]
-            })
-        });
-
-        const data = await response.json();
-        
-        if (data.choices && data.choices.length > 0) {
-            return data.choices[0].message.content;
-        } else {
-            return "Sorry, I couldn't generate a response.";
-        }
-    } catch (error) {
-        console.error("Error fetching AI response:", error);
-        return "Oops! AI is not responding. Check your API key.";
+    // Populate weight dropdown (1 to 800 lbs)
+    for (let i = 1; i <= 800; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `${i} lbs`;
+        currentWeightDropdown.appendChild(option);
     }
-}
+
+    // Handle form submission
+    document.getElementById('calculate').addEventListener('click', () => {
+        const currentWeight = parseInt(document.getElementById('current-weight').value);
+        const goalLoss = parseFloat(document.getElementById('goal-loss').value);
+        const wakeTime = document.getElementById('wake-time').value;
+        const workStart = document.getElementById('work-start').value;
+        const break1 = document.getElementById('break1').value;
+        const lunchTime = document.getElementById('lunch-time').value;
+        const break2 = document.getElementById('break2').value;
+        const workEnd = document.getElementById('work-end').value;
+
+        // Calculate caloric deficit
+        const dailyCaloricDeficit = goalLoss * 500;
+
+        // Suggest exercise
+        const exercisePlan = `
+            Morning: None (per your preference).
+            After Work: Walk for 30 minutes at a brisk pace.
+            Alternatives: High knees (3 sets x 30 seconds), Jumping Jacks (3 sets x 1 minute).
+        `;
+
+        // Suggest meal options
+        const mealOptions = `
+            Breakfast: Oatmeal with banana, Greek yogurt, or eggs with spinach.
+            Lunch: Grilled chicken salad, turkey sandwich, or quinoa bowl with veggies.
+            Dinner: Baked salmon, lean beef stir fry, or grilled tofu with sweet potatoes.
+        `;
+
+        // Water intake
+        const waterIntake = `
+            By Lunch: Drink at least 2 bottles of water.
+            Total Goal: Drink 8 bottles (16 oz each) by the end of the day.
+        `;
+
+        // Generate schedule
+        const schedule = `
+            Wake-Up Time: ${wakeTime}.
+            Work Start: ${workStart}.
+            First Break: ${break1}.
+            Lunch: ${lunchTime}.
+            Second Break: ${break2}.
+            Work End: ${workEnd}.
+            Workout: 30 minutes of walking or alternatives after ${workEnd}.
+        `;
+
+        // Display results
+        scheduleOutput.textContent = schedule;
+        mealsOutput.textContent = mealOptions;
+        waterOutput.textContent = waterIntake;
+    });
+});
